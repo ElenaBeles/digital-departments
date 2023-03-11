@@ -4,21 +4,25 @@
 <h1>Список тегов</h1>
 
 <ul>
-    {% for tag in tags %}
+    {% for article in articles %}
     <li>
-        <h4>{{ tag.title }}</h4>
-        <span>{{ tag.description }}</span>
+        <h4>{{ article.title }}</h4>
+        <span>{{ article.description }}</span>
     </li>
     {% endfor %}
 
 
 </ul>
 
-{% if tags|length == 0 %}
-<p>У вас пока нет тегов</p>
+{% if tags|articles == 0 %}
+<p>У вас пока нет статей</p>
 {% endif %}
 
 
 <br><br/>
+
+<p>Добавление статьи возможно через страницу "Создание статьи"</p>
+
 <p>Добавление тега возможно через страницу "Список тегов"</p>
+
 {% endblock %}

@@ -25,13 +25,14 @@ class AuthForm(forms.Form):
 
 
 class ArticleForm(forms.ModelForm):
+    description = forms.CharField(widget=forms.Textarea)
     def save(self, commit=True):
         self.instance.user = self.initial['user']
         return super().save(commit)
 
     class Meta:
         model = Article
-        fields = ('title', "counts_likes", "image", 'tags')
+        fields = ('title', "image", 'description', 'tags')
 
         widgets = {
             'created_at': forms.DateTimeInput(

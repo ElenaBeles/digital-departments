@@ -9,10 +9,10 @@ User = get_user_model()
 
 
 def main_view(request):
-    tags = Tag.objects.all();
+    articles = Article.objects.all();
 
     return render(request, "web/main.html", {
-        'tags': tags
+        'articles': articles
     })
 
 

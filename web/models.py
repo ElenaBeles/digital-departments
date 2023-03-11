@@ -12,7 +12,7 @@ class Tag(models.Model):
 
 class Article(models.Model):
     title = models.CharField(max_length=50)
-    created_At = models.DateTimeField
+    created_at = models.DateTimeField
     counts_likes = models.IntegerField(default=0)
     image = models.ImageField(upload_to='time_slots/', null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

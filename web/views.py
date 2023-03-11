@@ -1,54 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.utils.timezone import now
-from django.core.paginator import Paginator
-from django.db.models import Count, F, Max, Min, Q, Sum
-from django.db.models.functions import TruncDate
-from django.http import HttpResponse
-from django.views.decorators.cache import cache_page
 
-from web.forms import RegistrationForm, AuthForm
+from web.forms import RegistrationForm, AuthForm, ArticleForm, TagForm
+from web.models import Article, Tag
 
 User = get_user_model()
 
 
 def main_view(request):
-    # timeslots = TimeSlot.objects.filter(user=request.user).order_by('-start_date')
-    # current_timeslot = timeslots.filter(end_date__isnull=True).first()
-    #
-    # filter_form = TimeSlotFilterForm(request.GET)
-    # filter_form.is_valid()
-    # timeslots = filter_timeslots(timeslots, filter_form.cleaned_data)
-    #
-    # total_count = timeslots.count()
-    # timeslots = (
-    #     timeslots
-    #     .prefetch_related("tags")
-    #     .select_related("user")
-    #     .annotate(tags_count=Count("tags"))
-    #     .annotate_spent_time()
-    # )
-    # page_number = request.GET.get("page", 1)
-    #
-    # paginator = Paginator(timeslots, per_page=100)
-    #
-    # if request.GET.get("export") == 'csv':
-    #     response = HttpResponse(
-    #         content_type='text/csv',
-    #         headers={"Content-Disposition": "attachment; filename=timeslots.csv"}
-    #     )
-    #     return export_timeslots_csv(timeslots, response)
+    tags = Tag.objects.all();
 
-    # return render(request, "web/main.html", {
-    #     "current_timeslot": current_timeslot,
-    #     'timeslots': paginator.get_page(page_number),
-    #     "form": TimeSlotForm(),
-    #     "filter_form": filter_form,
-    #     'total_count': total_count
-    # })
-
-    return render(request, "web/main.html")
+    return render(request, "web/main.html", {
+        'tags': tags
+    })
 
 
 def registration_view(request):
@@ -81,3 +46,40 @@ def auth_view(request):
                 login(request, user)
                 return redirect("main")
     return render(request, "web/auth.html", {"form": form})
+
+
+@login_required
+def article_edit_view(request, id=None):
+    article = get_object_or_404(Article, user=request.user, id=id) if id is not None else None
+    form = ArticleForm(instance=article)
+
+    if request.method == 'POST':
+        form = ArticleForm(data=request.POST, files=request.FILES, instance=article, initial={"user": request.user})
+        if form.is_valid():
+            form.save()
+            return redirect("main")
+    return render(request, "web/article_form.html", {"form": form})
+
+
+@login_required
+def tags_view(request):
+    tags = Tag.objects.all()
+    form = TagForm()
+
+    if request.method == 'POST':
+        form = TagForm(data=request.POST, initial={"user": request.user})
+        if form.is_valid():
+            form.save()
+            redirect('tags')
+
+    return render(request, "web/tags.html", {
+        'tags': tags,
+        'form': form
+    })
+
+
+@login_required
+def tags_delete_view(request, id):
+    tag = get_object_or_404(Tag, user=request.user, id=id)
+    tag.delete()
+    return redirect('tags')

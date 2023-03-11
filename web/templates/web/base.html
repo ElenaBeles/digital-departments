@@ -13,18 +13,14 @@
     </div>
 
     {% else %}
-    <a href="{% url 'main' %}">Общие новости</a>
-    <a href="{% url 'time_slots_add' %}">Создание новостей</a>
-    <a href="{% url 'tags' %}">Теги</a>
-
-    <a href="{% url 'analytics' %}">Аналитика</a>
+    <a href="{% url 'main' %}">Главная страница</a>
+    <a href="{% url 'article_add' %}">Создание новостей</a>
+    <a href="{% url 'tags' %}">Список тегов</a>
 
     <div style="text-align: right">
         {% if not user.is_anonymous %}
         Вы авторизованы как <b>{{ user.username }}</b>
         {% endif %}
-
-        <a href="{% url 'logout' %}">Выход</a>
     </div>
     {% endif %}
 </nav>

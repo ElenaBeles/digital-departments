@@ -1,24 +1,29 @@
 {% extends 'web/base.html' %}
 {% block content %}
-
 <h1>Список тегов</h1>
 
 <ul>
     {% for tag in tags %}
     <li>
+        <button>
+            <a href="{% url 'tags_delete' tag.id %}">Удалить выбранный тег</a>
+        </button>
         <h4>{{ tag.title }}</h4>
         <span>{{ tag.description }}</span>
     </li>
     {% endfor %}
-
-
 </ul>
 
 {% if tags|length == 0 %}
 <p>У вас пока нет тегов</p>
 {% endif %}
 
+<hr/>
+<h3>Новый тег</h3>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить тег</button>
+</form>
 
-<br><br/>
-<p>Добавление тега возможно через страницу "Список тегов"</p>
 {% endblock %}

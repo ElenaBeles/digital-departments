@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from web.models import Article, Tag
 
 User = get_user_model()
 
@@ -21,3 +22,29 @@ class RegistrationForm(forms.ModelForm):
 class AuthForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput())
+
+
+class ArticleForm(forms.ModelForm):
+    def save(self, commit=True):
+        self.instance.user = self.initial['user']
+        return super().save(commit)
+
+    class Meta:
+        model = Article
+        fields = ('title', "counts_likes", "image", 'tags')
+
+        widgets = {
+            'created_at': forms.DateTimeInput(
+                attrs={"type": "datetime-local"}, format='%Y-%m-%dT%H:%M'
+            ),
+        }
+
+class TagForm(forms.ModelForm):
+    description = forms.CharField(widget=forms.Textarea)
+
+    def save(self, commit=True):
+        self.instance.user = self.initial['user']
+        return super().save(commit)
+    class Meta:
+        model = Tag
+        fields = ('title', 'description')

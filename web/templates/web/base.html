@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Time tracker</title>
+</head>
+<body>
+<h1><a href="{% url 'main' %}">News Feed</a></h1>
+<nav>
+    {% if user.is_anonymous %}
+    <div style="text-align: right">
+        <a href="{% url 'auth' %}">Вход</a>
+        <a href="{% url 'registration' %}">Регистрация</a>
+    </div>
+
+    {% else %}
+    <a href="{% url 'main' %}">Общие новости</a>
+    <a href="{% url 'time_slots_add' %}">Создание новостей</a>
+    <a href="{% url 'tags' %}">Теги</a>
+
+    <a href="{% url 'analytics' %}">Аналитика</a>
+
+    <div style="text-align: right">
+        {% if not user.is_anonymous %}
+        Вы авторизованы как <b>{{ user.username }}</b>
+        {% endif %}
+
+        <a href="{% url 'logout' %}">Выход</a>
+    </div>
+    {% endif %}
+</nav>
+<hr>
+{% block content %}{% endblock %}
+</body>
+</html>

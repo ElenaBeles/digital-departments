@@ -1,28 +1,30 @@
 {% extends 'web/base.html' %}
 {% block content %}
 
-<h1>Список тегов</h1>
+<h1>Текущие новости</h1>
 
 <ul>
     {% for article in articles %}
     <li>
         <h4>{{ article.title }}</h4>
+        <p>Описание:</p>
         <span>{{ article.description }}</span>
+
+        <a href="{% url 'article_edit' article.id%}">Редактировать</a>
+         <a href="{% url 'article_delete' article.id%}">Удалить</a>
     </li>
     {% endfor %}
-
-
 </ul>
 
-{% if tags|articles == 0 %}
+{% if articles|length == 0 %}
 <p>У вас пока нет статей</p>
 {% endif %}
 
 
 <br><br/>
 
-<p>Добавление статьи возможно через страницу "Создание статьи"</p>
+<p style="color: green">Добавление статьи возможно через страницу "Создание статьи"</p>
 
-<p>Добавление тега возможно через страницу "Список тегов"</p>
+<p style="color: green">Добавление тега возможно через страницу "Список тегов"</p>
 
 {% endblock %}

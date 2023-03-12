@@ -1,0 +1,13 @@
+{% extends 'web/base.html' %}
+{% block content %}
+    <h2>Ваша аналитика</h2>
+
+    <hr/>
+    <b>Статистика по статьям</b>
+
+    <p>
+        Всего статей - <b>{{ overall_stat.count }}</b>.
+        Вы написали статей - <b>{{ user_stat }}</b>.
+    </p>
+
+{% endblock %}
